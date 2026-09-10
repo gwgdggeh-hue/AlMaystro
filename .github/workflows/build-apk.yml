@@ -37,8 +37,9 @@ jobs:
       - name: فك مشروع المايسترو
         run: |
           unzip -q AlMaystro_GitHub_Ready_API36.zip -d extracted
-          echo "PROJECT_DIR=extracted/AlMaystro_APK_Project_API36" >> "$GITHUB_ENV"
-
+          PROJECT_DIR="$(dirname "$(find extracted -type f \( -name settings.gradle -o -name settings.gradle.kts \) -print -quit)")"
+echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
+echo "Project directory: $PROJECT_DIR"
       - name: بناء APK
         run: |
           gradle --no-daemon -p "$PROJECT_DIR" assembleDebug
@@ -47,4 +48,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: AlMaystro-APK
-          path: extracted/AlMaystro_APK_Project_API36/app/build/outputs/apk/debug/app-debug.apk
+        path: ${{ env.PROJECT_DIR }}/app/build/outputs/apk/debug/app-debug.apk
